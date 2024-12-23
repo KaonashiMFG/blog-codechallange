@@ -1,4 +1,3 @@
-// import { Raleway, Sawarabi_Mincho, Young_Serif } from "next/font/google";
 import type { Config } from "tailwindcss";
 
 export default {
@@ -25,3 +24,5 @@ export default {
   },
   plugins: [],
 } satisfies Config;
+
+

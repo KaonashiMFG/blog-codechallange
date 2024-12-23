@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Raleway, Kanit, Sawarabi_Mincho } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,6 +12,23 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+export const raleway = Raleway({
+  subsets: ['latin'],
+  variable: '--font-raleway'
+});
+
+export const sawarabiMincho = Sawarabi_Mincho({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-sawarabiMincho'
+});
+
+export const kanit = Kanit({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-kanit'
 });
 
 export const metadata: Metadata = {
