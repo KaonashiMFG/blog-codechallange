@@ -1,0 +1,17 @@
+[
+    {
+      "logo": "/nav/post.svg",
+      "label": "Post",
+      "herf": "/post"
+    },
+    {
+      "logo": "/nav/categories.svg",
+      "label": "Categories",
+      "herf": "/categories"
+    },
+    {
+      "logo": "/nav/about.svg",
+      "label": "About",
+      "herf": "about"
+    }
+  ]

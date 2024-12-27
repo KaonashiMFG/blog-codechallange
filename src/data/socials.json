@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Instagram",
+    "icon": "/socials/instagram.svg",
+    "color": "#f56040",
+    "url": "https://www.instagram.com/urenunknacdb/"
+  },
+  {
+    "id": 2,
+    "name": "LinkedIn",
+    "icon": "/socials/linkedin.svg",
+    "color": "#0077b5",
+    "url": "https://www.linkedin.com/in/dharmasena-aji-024765234/"
+  },
+  {
+    "id": 3,
+    "name": "GitHub",
+    "icon": "/socials/github.svg",
+    "color": "#010508",
+    "url": "https://github.com/KaonashiMFG"
+  }
+]
