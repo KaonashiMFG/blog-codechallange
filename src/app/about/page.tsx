@@ -1,9 +1,15 @@
-"use client"
+"use client";
 
 import Image from "next/image";
+import { useState } from "react";
+
 import socials from "../../data/socials.json";
+import history from "../../data/blogHistory.json";
+import contacts from "../../data/contacts.json";
 
 export default function About() {
+  const [readMore, setReadMore] = useState(false);
+
   return (
     <>
       {/* WELCOME */}
@@ -18,47 +24,89 @@ export default function About() {
           />
         </div>
         <div className="relative flex max-w-[1200px] flex-col gap-5 rounded-2xl bg-main p-10 text-center opacity-90">
-          <h1 className="w-full font-sawarabiMincho text-5xl">
-            WELCOME to Me:Japan
-          </h1>
+          <h1 className="w-full font-sawarabiMincho text-5xl">Me:Japan</h1>
           <span className="-mt-2 font-sawarabiMincho text-sm">
             Japan is a land where ancient traditions meet cutting-edge
             modernity.
           </span>
           <div className="h-1 w-full bg-black"></div>
-          <p className="font-kanit">
-            Welcome to my corner of the internet, where I share my passion for
-            Japan. From its rich cultural heritage to the latest trends, I am
-            here to document everything that makes Japan so fascinating. Whether
-            you are a fellow enthusiast, a curious traveler, or someone with
-            deep connections to Japan, you&apos;re in the right place!
+
+          <p>
+            I am here to document everything that makes Japan so fascinating.
+            Whether you are a fellow enthusiast, a curious traveler, or someone
+            with deep connections to Japan, you&apos;re in the right place!
             Let&apos;s explore the wonders of this beautiful country together.
+            Japan is a land of contrasts, where ancient temples stand alongside
+            modern skyscrapers, and traditional tea ceremonies coexist with
+            cutting-edge technology. It is a place where you can experience the
+            serenity of a Zen garden and the excitement of a bustling metropolis
+            all in one day.
+            <span
+              className={`cursor-pointer text-blue-500 ${
+                readMore ? "opacity-0 duration-300" : "mt-1"
+              }`}
+              onClick={() => setReadMore(!readMore)}
+            >
+              Read More
+            </span>
+          </p>
+          <p
+            className={`${
+              readMore
+                ? "max-h-screen opacity-100 duration-500"
+                : "max-h-0 opacity-0 duration-300"
+            }`}
+          >
+            In this blog, I aim to capture the essence of Japan through my
+            personal experiences, stories, and insights. I will take you on a
+            journey through the picturesque landscapes, introduce you to the
+            unique customs and traditions, and provide tips and recommendations
+            for anyone planning to visit or learn more about Japan. Whether it
+            is the mouth-watering cuisine, the intricate art forms, or the
+            heartwarming hospitality of the people, there is always something
+            new and exciting to discover.
           </p>
         </div>
       </section>
 
       {/* HISTORY */}
-      <section className="bg-main p-20 flex flex-col gap-2">
-        <h1 className="font-sawarabiMincho mb-3 bg-secondary p-2">Lets read a little history about this Blog!!</h1>
+      <section className="flex flex-col gap-2 bg-main p-20">
+        <h1 className="mb-3 bg-secondary p-3 text-main">
+          Lets read a little history about this Blog!!
+        </h1>
+
         <div className="flex flex-col gap-5">
-          <div>
-            <p className="font-semibold font-kanit">An idea in 2021,</p> 
-            <p className="font-kanit">
-              i fancied japanese culture since when i was in highschool. From then on i started to learn about japanese seriously and fortunately got into collage in japanese study.
+          {history.map((items, index) => (
+            <div key={index}>
+              <p className="font-semibold">{items.parOne}</p>
+              <p>{items.parTwo}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      {/* PURPOSE */}
+      <section className="bg-main px-20 pb-20">
+        <h1 className="mb-3 bg-secondary p-3 text-main">Of Purpose and Mission</h1>
+        <div className="grid grid-cols-2 gap-10">
+          <div className="flex flex-col gap-5 items-center mt-5">
+            <h2>Purpose</h2>
+            <p className="text-center px-10">
+              Our purpose is to provide a platform for people to learn more
+              about Japan, its culture, and its people. We aim to create a
+              community where enthusiasts, travelers, and Japanophiles can
+              connect, share their experiences, and gain insights into the
+              beauty and uniqueness of Japan.
             </p>
           </div>
-
-          <div>
-            <p className="font-semibold font-kanit">Furthermore in 2022,</p> 
-            <p className="font-kanit">
-              At that time, I was in the 3rd semester of my studies, and I gained a lot of knowledge about Japan. My interest in Japanese culture deepened as I explored various aspects of its history, language, and traditions.
-            </p>
-          </div>
-
-          <div>
-            <p className="font-semibold font-kanit">Start in 2024,</p> 
-            <p className="font-kanit">
-              in this year i took a class for web development and i got an idea to make a blog about japan. I started to learn about web development and finally i made this blog.
+          <div className="flex flex-col gap-5 items-center mt-5">
+            <h2>Mission</h2>
+            <p className="text-center px-10">
+              Our mission is to inspire and educate people about Japan through
+              engaging and informative content. We strive to showcase the
+              diversity and richness of Japanese culture, history, and
+              traditions, and to foster a deeper appreciation and understanding
+              of this fascinating country.
             </p>
           </div>
         </div>
@@ -76,12 +124,11 @@ export default function About() {
         </div>
         <div className="relative m-20 flex max-w-[1200px] gap-5 rounded-2xl bg-main p-10 opacity-90">
           <div className="flex flex-col gap-5">
-            <span className="font-kanit">
-              Hover my face!
-              there are some socials you can visit
+            <span className="text-lg text-secondary">
+              Hover my face! there are some socials you can visit:
             </span>
             {/* myself image and socials container */}
-            <div className="relative group">
+            <div className="group relative">
               <div className="mr-10 transition-all duration-300 group-hover:blur-xl">
                 <Image
                   src={"/myself.jpg"}
@@ -91,14 +138,14 @@ export default function About() {
                   alt="me: dharmasena akamal aji"
                 />
               </div>
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2 items-center opacity-0 transition-all duration-300 group-hover:opacity-100">
+              <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-2 opacity-0 transition-all duration-300 group-hover:opacity-100">
                 {socials.map((item, index) => (
-                  <a 
-                    href={item.url} 
-                    key={item.id || index} 
-                    className="flex gap-2 items-center justify-center p-2 w-32 hover:scale-110 transition-all duration-300"
+                  <a
+                    href={item.url}
+                    key={item.id || index}
+                    className="flex w-32 items-center justify-center gap-2 p-2 transition-all duration-300 hover:scale-110"
                     style={{
-                      backgroundColor: 'white',
+                      backgroundColor: "white",
                       border: `2px solid ${item.color}`,
                     }}
                   >
@@ -108,7 +155,7 @@ export default function About() {
                         alt={item.name}
                         width={20}
                         height={20}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                     <p className="text-inherit">{item.name}</p>
@@ -118,18 +165,35 @@ export default function About() {
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <h1 className="font-sawarabiMincho">
-              こんにちは！ これは私のこと！
-            </h1>
-            <h2 className="font-sawarabiMincho">Hello! Get to know me!</h2>
-            <p className="font-kanit">
+            <h1>こんにちは！ これは私のこと！</h1>
+            <h2>Hello! Get to know me!</h2>
+            <p>
               My name is Dharmasena, nice to meet you !!. I&apos;m passionate
-              about all things Japan! For over five years, I&apos;ve been immersed in
-              the beauty of the Japanese language and culture. My journey
-              started with a fascination for Japan&apos;s unique blend of
-              tradition and modernity, and it has since grown into a deep
+              about all things Japan! For over five years, I&apos;ve been
+              immersed in the beauty of the Japanese language and culture. My
+              journey started with a fascination for Japan&apos;s unique blend
+              of tradition and modernity, and it has since grown into a deep
               connection that I love sharing with others.
             </p>
+            <div>
+              <h2>Reach out to me!!</h2>
+              <div className="mt-3 flex flex-col gap-2">
+                {contacts.map((item, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className="h-6 w-6 overflow-hidden">
+                      <Image
+                        src={item.icon}
+                        alt={item.title}
+                        width={20}
+                        height={20}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <p>{item.reachOut}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -18,7 +18,7 @@ export default {
       fontFamily:{
         "sawarabiMincho":["Sawarabi_Mincho", "Young_Serif"],
         "raleway": ["Raleway", "Young_Serif"],
-        "kanit": ["kanit", "Young_Serif"]
+        "kanit": ["Kanit", "Young_Serif"]
       }
     },
   },

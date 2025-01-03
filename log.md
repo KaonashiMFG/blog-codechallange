@@ -26,3 +26,17 @@
 ## 26/12/2024
 
 1. masukin contentfulnya gak ngerti, jadinya masukin history di about page
+
+## 29/12/2024
+
+1. hero sectionnya dh bagus kata gw. 
+
+   ### yang susah masih ada:
+   - featured dan popular post di heronya
+   - search filter
+   - Categories Sidebar
+
+## 31/12/2024 && 1/1/2025
+
+#### waah sudah ingin taun baruan. semoga yang terbaik buat kehidupan di taun selanjutnya. dan menjadi orang yang lebih baik dari taun sebelumnya
+

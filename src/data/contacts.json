@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Whatsapp",
+    "icon": "/contacts/whatsapp.svg",
+    "reachOut": "+62-812-9092-7605"
+  },
+  {
+    "id": 2,
+    "title": "Email",
+    "icon": "/contacts/mail.svg",
+    "reachOut": "dharmasenaakmalaji@outlook.com"
+  },
+  {
+    "id": 3,
+    "title": "Location",
+    "icon": "/contacts/locate.svg",
+    "reachOut": "jl. Masjid Al-Anwar No.18"
+  }
+]

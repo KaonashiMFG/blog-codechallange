@@ -4,11 +4,15 @@
 
 @layer base{
     h1 {
-        @apply text-3xl;
+        @apply text-3xl font-sawarabiMincho;
     }
 
     h2 {
-        @apply text-2xl;
+        @apply text-2xl font-sawarabiMincho;
+    }
+
+    p, span {
+        @apply font-kanit;
     }
     
 }

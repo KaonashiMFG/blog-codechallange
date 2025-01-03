@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@contentful/rich-text-react-renderer": "^16.0.1",
     "contentful": "^11.3.3",
     "next": "15.1.0",
     "react": "^19.0.0",
@@ -22,8 +23,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
     "postcss": "^8",
-    "prettier": "^2.8.8",
-    "prettier-plugin-tailwind": "^2.2.12",
+    "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
