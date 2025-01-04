@@ -70,8 +70,8 @@ export default function About() {
       </section>
 
       {/* HISTORY */}
-      <section className="flex flex-col gap-2 bg-main p-20">
-        <h1 className="mb-3 bg-secondary p-3 text-main">
+      <section className="flex flex-col gap-2 bg-main p-20 ">
+        <h1 className="mb-3 bg-secondary p-3 text-main max-xl:text-center">
           Lets read a little history about this Blog!!
         </h1>
 
@@ -86,11 +86,11 @@ export default function About() {
       </section>
       
       {/* PURPOSE */}
-      <section className="bg-main px-20 pb-20">
+      <section className="bg-main pb-20 ">
         <h1 className="mb-3 bg-secondary p-3 text-main">Of Purpose and Mission</h1>
-        <div className="grid grid-cols-2 gap-10">
+        <div className="grid grid-cols-2 gap-10 max-xl:grid-cols-1">
           <div className="flex flex-col gap-5 items-center mt-5">
-            <h2>Purpose</h2>
+            <h2 className="bg-secondary rounded-full text-main p-3">Purpose</h2>
             <p className="text-center px-10">
               Our purpose is to provide a platform for people to learn more
               about Japan, its culture, and its people. We aim to create a
@@ -100,7 +100,7 @@ export default function About() {
             </p>
           </div>
           <div className="flex flex-col gap-5 items-center mt-5">
-            <h2>Mission</h2>
+            <h2 className="bg-secondary rounded-full text-main p-3">Mission</h2>
             <p className="text-center px-10">
               Our mission is to inspire and educate people about Japan through
               engaging and informative content. We strive to showcase the
@@ -113,23 +113,23 @@ export default function About() {
       </section>
 
       {/* AUTHOR */}
-      <section className="relative flex min-h-screen items-center justify-center">
-        <div className="absolute h-full w-full">
+      <section className="relative flex min-h-screen items-center justify-center p-20 bg-secondary text-center">
+        {/* <div className="absolute h-full w-full ">
           <Image
             src="/hokusai fuji.webp"
             alt="hokusai fuji painting"
             fill
-            className="object-cover"
+            className="object-cover "
           />
-        </div>
-        <div className="relative m-20 flex max-w-[1200px] gap-5 rounded-2xl bg-main p-10 opacity-90">
+        </div> */}
+        <div className="relative m-20 flex gap-10 rounded-2xl bg-main p-10 opacity-90 max-xl:flex-col">
           <div className="flex flex-col gap-5">
             <span className="text-lg text-secondary">
-              Hover my face! there are some socials you can visit:
+              On picture of me! there are some socials you can visit:
             </span>
             {/* myself image and socials container */}
             <div className="group relative">
-              <div className="mr-10 transition-all duration-300 group-hover:blur-xl">
+              <div className="transition-all duration-300 group-hover:blur-xl max-xl:relative max-xl:left-10">
                 <Image
                   src={"/myself.jpg"}
                   width={200}

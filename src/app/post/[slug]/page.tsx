@@ -14,6 +14,11 @@ export default async function SlugPost({
     fields_slug: slug,
   });
 
+ console.log(post)
+  
+  const postContent = post![0]?.fields.content?.content[0].content
+  const contentVal = postContent.map((val: any) => { return val.value })
+
   return (
     <section className="bg-main p-4 md:p-8 lg:p-20">
       {/* back button */}
@@ -53,7 +58,7 @@ export default async function SlugPost({
         </p>
         
         <p className="text-sm md:text-base">
-          {post![0]?.fields?.content?.content[0].content[0].value}
+          {contentVal}
         </p>
       </div>
     </section>
