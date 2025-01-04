@@ -14,7 +14,7 @@ export default async function SlugCategory({
       fields_category: slug,
     })) || [];
 
-    console.log(posts);
+console.log(posts);
 
   return (
     <section className="bg-main p-20">
