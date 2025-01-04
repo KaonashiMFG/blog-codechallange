@@ -2,7 +2,7 @@ import { getEntries } from "@/utils/contentful-data";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function PostOnePage({
+export default async function SlugPost({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -14,14 +14,12 @@ export default async function PostOnePage({
     fields_slug: slug,
   });
 
-  console.log(post);
-
   return (
     <>
       <section className="bg-main p-20">
         {/* back button */}
         <Link href={"/post"}>
-          <div>
+          <div className="absolute cursor-pointer">
             <Image
               src={"/blog/back.svg"}
               width={50}
@@ -31,7 +29,10 @@ export default async function PostOnePage({
           </div>
         </Link>
         {/* content */}
-        <div className="flex flex-col gap-5 p-10 px-52">
+        <div className="p- flex flex-col gap-5 px-52">
+          <span className="rounded-3xl bg-secondary p-2 text-main text-center">
+            {post && post[0] && String(post[0].fields.categories)}
+          </span>
           <div className="relative h-52 w-full overflow-hidden">
             <Image
               src={`https:${post![0].fields.featuredImage?.fields.file.url}`}
@@ -42,9 +43,7 @@ export default async function PostOnePage({
           </div>
           <h1>{post && post[0] && String(post[0].fields.title)}</h1>
           <p>Author: {post && post[0] && String(post[0].fields.author)}</p>
-          <p>
-            {post![0]?.fields?.content?.content[0].content[0].value}
-          </p>
+          <p>{post![0]?.fields?.content?.content[0].content[0].value}</p>
         </div>
       </section>
     </>

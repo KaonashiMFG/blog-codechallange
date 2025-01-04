@@ -10,16 +10,19 @@ export async function getEntries({
   content_type,
   fields_popular,
   fields_slug,
+  fields_category,
  }: {
   content_type: string;
   fields_popular?: boolean;
   fields_slug?: string;
+  fields_category?: string;
  }) {
   try {
     const data = await client.getEntries({
       content_type: content_type,
       "fields.popular": fields_popular,
       "fields.slug": fields_slug,
+      "fields.categories": fields_category
     });
  
     return data.items;
@@ -51,27 +54,27 @@ export async function getAllBLOG() {
   }
 }
 
-export async function getFeaturedBLOG() {
-  try {
-    const data = await client.getEntries({content_type: "blog", "fields.featured": true})
+// export async function getFeaturedBLOG() {
+//   try {
+//     const data = await client.getEntries({content_type: "blog", "fields.featured": true})
 
-    return data.items.map((post) => {
-      const thumbnailUrl = post?.fields?.featuredImage?.fields.file.url;
+//     return data.items.map((post) => {
+//       const thumbnailUrl = post?.fields?.featuredImage?.fields.file.url;
 
-      return {
-        title: post.fields.title,
-        slug: post.fields.slug,
-        author: post.fields.author,
-        content: post.fields.content?.content[0].content[0].value,
-        featuredImage: `http:${thumbnailUrl}`,
-        categories: post.fields.categories,
-      };
-    });
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+//       return {
+//         title: post.fields.title,
+//         slug: post.fields.slug,
+//         author: post.fields.author,
+//         content: post.fields.content?.content[0].content[0].value,
+//         featuredImage: `http:${thumbnailUrl}`,
+//         categories: post.fields.categories,
+//       };
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
 export async function getLatestPosts() {
   try {

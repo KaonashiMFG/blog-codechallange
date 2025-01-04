@@ -7,13 +7,13 @@ export default async function Categories() {
 
   return (
     <>
-      <section className="flex flex-col gap-5 bg-main p-20">
-        <h1 className="bg-secondary p-5 text-center text-main">
+      <section className="flex flex-col gap-5 bg-main p-20 py-10">
+        <h1 className=" p-5 text-center text-secondary text-4xl">
           My Categories
         </h1>
         <div className="flex flex-col items-center justify-center gap-5">
           {cats?.map((cat, index) => (
-            <div key={index} className="relative h-40 w-full">
+            <div key={index} className="relative h-12 w-full hover:opacity-80 hover:shadow-lg hover:scale-105 transition-all duration-300">
               <Image
                 src={typeof cat?.image === "string" ? cat.image : ""}
                 alt="category"

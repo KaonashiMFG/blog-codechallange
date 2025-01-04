@@ -2,20 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   getAllHero,
-  getAllCategories,
   getLatestPosts,
+  getEntries
 } from "../utils/contentful-data";
 
 export default async function Hero() {
   const heroes = await getAllHero();
-  const cats = await getAllCategories();
   const latestPosts = await getLatestPosts();
+  const featuredCategories = await getEntries({content_type: "categories", fields_popular: true});
+
+  console.log(featuredCategories)
 
   return (
     <>
       {/* HERO */}
       <section className="relative flex min-h-[calc(100vh-80px)] justify-center bg-main">
-        <div key="21" className="mx-20 my-4 max-w-full">
+        <div className="mx-20 my-4 max-w-full">
           {heroes?.map((hero, index) => (
             <>
               <div key={index} className="flex">
@@ -65,7 +67,7 @@ export default async function Hero() {
                     <p>
                       {typeof post.preview === "string" ? post.preview : ""}
                     </p>
-                    <Link href="/" className="text-blue-300">
+                    <Link href={`/post/${typeof post.slug === "string" ? post.slug : ""}`} className="text-blue-300">
                       Read More
                     </Link>
                   </div>
@@ -83,16 +85,16 @@ export default async function Hero() {
             My <br /> Featured <br /> Categories
           </h1>
         </div>
-        {cats?.map((cat, index) => (
+        {featuredCategories?.map((cat, index) => (
           <div key={index} className="relative h-80 w-52">
             <Image
-              src={typeof cat?.image === "string" ? cat.image : ""}
+              src={"http:" + cat?.fields?.image?.fields.file.url}
               alt="category"
               fill
               className="absolute object-cover opacity-80"
             />
             <h2 className="absolute w-full bg-secondary bg-opacity-90 p-2 pl-5 text-main">
-              {typeof cat.title === "string" ? cat.title : ""}
+              {typeof cat?.fields?.title === "string" ? cat.fields.title : ""}
             </h2>
           </div>
         ))}

@@ -40,3 +40,11 @@
 
 #### waah sudah ingin taun baruan. semoga yang terbaik buat kehidupan di taun selanjutnya. dan menjadi orang yang lebih baik dari taun sebelumnya
 
+## 3/1/2025
+
+1. ini mestinya dh tinggal **search filter** dan **categories sidebarnya** sih di postnya
+
+   belum:
+   - ini harus make featured categories di home page
+   - buat side bar category di blog
+   - search bar
