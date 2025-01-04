@@ -1,9 +1,9 @@
 import * as contentful from "contentful";
 
 const client = contentful.createClient({
-  space: process.env.CONTENTFUL_SPACE_ID || "",
+  space: "8am65wx5arte",
   environment: "master",
-  accessToken: process.env.CONTENTFUL_ACCESS_KEY || "",
+  accessToken: "ZmiPHuDGZZ31mre15_qdA_VGB38D7Q_Mwbjwf2V7FAw",
 });
 
 export async function getEntries({

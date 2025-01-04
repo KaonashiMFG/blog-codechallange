@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BgColor from "@/components/bg-color";
 
 import type { Metadata } from "next";
 import {
