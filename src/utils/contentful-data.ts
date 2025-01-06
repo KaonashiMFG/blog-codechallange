@@ -32,7 +32,7 @@ export async function getEntries({
   }
 }
 
-export async function getAllBLOG() {
+export async function getAllBlog() {
   try {
     const data = await client.getEntries({ content_type: "blog" });
 
@@ -45,7 +45,7 @@ export async function getAllBLOG() {
         author: post.fields.author,
         content: post.fields.content?.content[0].content[0].value,
         featuredImage: `http:${thumbnailUrl}`,
-        categories: post.fields.categories,
+        categories: post.fields.category.map((item) => item.fields.title),
       };
     });
   } catch (error) {
