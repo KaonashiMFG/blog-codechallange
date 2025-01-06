@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllBLOG } from "@/utils/contentful-data";
+import { getAllBLOG, getAllCategories } from "@/utils/contentful-data";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,8 +10,9 @@ export default function Post() {
   const [filteredPosts, setFilteredPosts] = useState<any[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Toggle state for sidebar
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // FOR POST TO APPEAR
   useEffect(() => {
     async function fetchPosts() {
       const allPosts = await getAllBLOG();
@@ -19,30 +20,45 @@ export default function Post() {
       if (allPosts) {
         setPosts(allPosts);
         setFilteredPosts(allPosts);
-
-        const uniqueCategories = [
-          ...new Set(allPosts.flatMap((post: any) => post.categories || [])),
-        ];
-        setCategories(uniqueCategories);
       }
     }
 
     fetchPosts();
   }, []);
+  
+  // FOR CATEGORIES TO APPEAR
+  useEffect(() => {
+    async function getCategories() {
+      const cats = await getAllCategories()
 
+      if (cats) {
+        const categoryNames = cats.map((cat: any) => cat.title);
+        setCategories(categoryNames);
+      }
+
+    }
+    getCategories()
+  }, [])
+
+  //for filtering
   useEffect(() => {
     if (selectedCategories.length > 0) {
-      setFilteredPosts(
-        posts.filter((post) =>
-          post.categories.some((category: string) =>
-            selectedCategories.includes(category),
-          ),
-        ),
-      );
+      const filtered = posts.filter((post) => {
+        if (!post.categories || !Array.isArray(post.categories)) {
+          console.warn('Invalid categories for post:', post.title);
+          return false;
+        }
+        return post.categories.some((category: any) =>
+          selectedCategories.includes(category)
+        );
+      });
+      setFilteredPosts(filtered);
     } else {
       setFilteredPosts(posts); // Show all posts if no category is selected
     }
   }, [selectedCategories, posts]);
+  
+
 
   // Handle category checkbox toggle
   const toggleCategory = (category: string) => {
@@ -54,17 +70,19 @@ export default function Post() {
     );
   };
 
+  
+
   return (
     <div className="flex">
       {/* Sidebar (Desktop Only) */}
-      <div className="hidden min-h-[calc(100vh-80px)] bg-secondary p-5 md:block md:w-1/4">
+      <div className="hidden min-h-[calc(100vh-80px)] bg-secondary p-5 md:block md:w-1/4 ">
         <div className="rounded-3xl bg-main p-5">
           <h2 className="mb-3 font-raleway text-lg font-bold text-secondary">
             Categories:
           </h2>
           <ul className="space-y-2">
-            {categories.map((category) => (
-              <li key={category}>
+            {categories.map((category, index) => (
+              <li key={index}>
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -98,8 +116,8 @@ export default function Post() {
             }`}
           >
             <ul className="flex flex-col gap-2">
-              {categories.map((category) => (
-                <li key={category} className="text-main">
+              {categories.map((category, index) => (
+                <li key={index} className="text-main">
                   <label className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -115,15 +133,14 @@ export default function Post() {
           </div>
         </div>
 
-        <h1 className="flex justify-center bg-secondary p-5 text-center text-lg text-main md:text-xl">
+        <h1 className="flex justify-center bg-secondary p-5 text-center text-lg text-main md:text-3xl">
           Posts
         </h1>
         <div  className="flex flex-col gap-5 py-5">
-          {filteredPosts?.map((item) => (
-            <>
+          {filteredPosts?.map((item, index) => (
+            <div key={index} className="flex flex-col gap-5">
               <article
-                key={String(item.slug)}
-                className="flex flex-col gap-5 md:flex-row md:items-center md:gap-5"
+                className="flex flex-col md:flex-row max-xl:text-start max-xl:justify-start gap-5"
               >
                 {/* Image Section */}
                 <div className="relative h-32 w-full md:w-1/2">
@@ -154,7 +171,7 @@ export default function Post() {
                 </div>
               </article>
               <div className="h-1 w-full bg-secondary"></div>
-            </>
+            </div>
           ))}
         </div>
       </section>

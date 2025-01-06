@@ -93,9 +93,11 @@ export default async function Hero() {
                 fill
                 className="absolute object-cover opacity-80"
               />
+              <Link href={`/categories/${cat.fields.slug}`}>
               <h2 className="absolute w-full bg-secondary bg-opacity-90 p-2 pl-5 text-main">
                 {typeof cat?.fields?.title === "string" ? cat.fields.title : ""}
               </h2>
+              </Link>
             </div>
           ))}
         </div>

@@ -10,19 +10,19 @@ export async function getEntries({
   content_type,
   fields_popular,
   fields_slug,
-  fields_category,
+  fields_categories,
 }: {
   content_type: string;
   fields_popular?: boolean;
   fields_slug?: string;
-  fields_category?: string;
+  fields_categories?: string;
 }) {
   try {
     const data = await client.getEntries({
       content_type: content_type,
       "fields.popular": fields_popular,
       "fields.slug": fields_slug,
-      "fields.categories": fields_category,
+      "fields.categories": fields_categories,
     });
 
     return data.items;

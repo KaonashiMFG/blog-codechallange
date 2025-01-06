@@ -37,7 +37,7 @@ export default async function SlugPost({
       {/* content */}
       <div className="flex flex-col gap-4 md:gap-5 px-4 md:px-20 lg:px-52 mt-12 md:mt-0">
         <span className="rounded-3xl bg-secondary p-2 text-main text-center text-sm md:text-base">
-          {post && post[0] && String(post[0].fields.categories)}
+          {post && post[0] && String((post[0]?.fields?.category as [{}])[0].fields.title)}
         </span>
         
         <div className="relative h-40 md:h-48 lg:h-52 w-full overflow-hidden rounded-lg">

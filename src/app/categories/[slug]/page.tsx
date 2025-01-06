@@ -10,8 +10,7 @@ export default async function SlugCategory({
   const { slug } = params;
   const posts =
     (await getEntries({
-      content_type: "blog",
-      fields_category: slug,
+      content_type: "blog", fields_popular: true
     })) || [];
 
 console.log(posts);
@@ -37,7 +36,7 @@ console.log(posts);
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         {posts?.length > 0 ? (
-          posts?.map((post: any, index: number) => (
+          posts?.map((post, index: number) => (
             <div key={index} className="rounded-md border bg-secondary p-5">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
@@ -49,9 +48,9 @@ console.log(posts);
               </div>
               <div className="flex flex-col gap-3">
                 <h2 className="mt-3 rounded-lg bg-main p-1 px-3 text-lg font-bold font-raleway">
-                  {post.fields.title}
+                  {typeof post.fields.title === 'string' ? post.fields.title : ''}
                 </h2>
-                <p className="text-sm text-main h-[80px]">{post.fields.preview}</p>
+                <p className="text-sm text-main h-[80px]">{typeof post.fields.preview === 'string' ? post.fields.preview : ''}</p>
                 <Link href={`/post/${post.fields.slug}`}>
                   <button className=" text-blue-300 underline">
                     Read More
