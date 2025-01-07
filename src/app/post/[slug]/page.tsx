@@ -6,17 +6,17 @@ import { Document } from "@contentful/rich-text-types";
 
 interface Post {
   fields: {
-    title: string
-    content: Document
-    author: string
+    title: string;
+    content: Document;
+    author: string;
     featuredImage: {
-      fields:{
-        file:{
-          url:string
-        }
-      }
-    }
-  }
+      fields: {
+        file: {
+          url: string;
+        };
+      };
+    };
+  };
 }
 
 export default async function SlugPost({
@@ -29,8 +29,7 @@ export default async function SlugPost({
   const post = (await getEntries({
     content_type: "blog",
     fields_slug: slug,
-  })) as unknown as Post[]
-
+  })) as unknown as Post[];
 
   console.log(post);
 
@@ -38,6 +37,13 @@ export default async function SlugPost({
   // const contentVal = postContent.map((val: any) => {
   //   return val.value;
   // });
+
+  if (!post)
+    return (
+      <section>
+        <p>Loading...</p>
+      </section>
+    );
 
   return (
     <section className="bg-main p-4 md:p-8 lg:p-20">
@@ -73,11 +79,11 @@ export default async function SlugPost({
           {post[0].fields.title}
         </h1>
 
-        <p className="text-sm md:text-base">
-          Author: {post[0].fields.author}
-        </p>
+        <p className="text-sm md:text-base">Author: {post[0].fields.author}</p>
 
-        <div className="text-sm md:text-base">{documentToReactComponents(post[0].fields.content)}</div>
+        <div className="text-sm md:text-base">
+          {documentToReactComponents(post[0].fields.content)}
+        </div>
       </div>
     </section>
   );
