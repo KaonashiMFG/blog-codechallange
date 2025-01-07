@@ -62,7 +62,7 @@ export default async function SlugPost({
 
         <div className="relative h-40 w-full overflow-hidden rounded-lg md:h-48 lg:h-52">
           <Image
-            src={`https:${post[0]!.fields.featuredImage.fields.file.url}`}
+            src={`https:${post![0].fields.featuredImage.fields.file.url}`}
             fill
             alt="featured image"
             className="object-cover"
