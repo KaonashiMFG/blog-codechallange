@@ -2,6 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { getEntries } from "../../../utils/contentful-data";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { Document } from "@contentful/rich-text-types";
+
+interface Post {
+  fields: {
+    title: string
+    content: Document
+    author: string
+    featuredImage: {
+      fields:{
+        file:{
+          url:string
+        }
+      }
+    }
+  }
+}
 
 export default async function SlugPost({
   params,
@@ -13,14 +29,8 @@ export default async function SlugPost({
   const post = (await getEntries({
     content_type: "blog",
     fields_slug: slug,
-  }))
-  //  as unknown as {
-  //   post: [
-  //     fields: {
-  //       title: string
-  //     }
-  //   ];
-  // };
+  })) as unknown as Post[]
+
 
   console.log(post);
 
@@ -47,14 +57,12 @@ export default async function SlugPost({
       {/* content */}
       <div className="mt-12 flex flex-col gap-4 px-4 md:mt-0 md:gap-5 md:px-20 lg:px-52">
         <span className="rounded-3xl bg-secondary p-2 text-center text-sm text-main md:text-base">
-          {post &&
-            post[0] &&
-            String((post[0]?.fields?.category as { fields: { title: string } }[])[0].fields.title)}
+          {post[0].fields.title}
         </span>
 
         <div className="relative h-40 w-full overflow-hidden rounded-lg md:h-48 lg:h-52">
           <Image
-            src={`https:${(post![0].fields.featuredImage as { fields: { file: { url: string } } }).fields.file.url}`}
+            src={`https:${post[0]!.fields.featuredImage.fields.file.url}`}
             fill
             alt="featured image"
             className="object-cover"
@@ -62,11 +70,11 @@ export default async function SlugPost({
         </div>
 
         <h1 className="text-xl md:text-2xl lg:text-3xl">
-          {post && post[0] && String(post[0].fields.title)}
+          {post[0].fields.title}
         </h1>
 
         <p className="text-sm md:text-base">
-          Author: {post && post[0] && String(post[0].fields.author)}
+          Author: {post[0].fields.author}
         </p>
 
         <div className="text-sm md:text-base">{documentToReactComponents(post[0].fields.content)}</div>
