@@ -46,7 +46,7 @@ export default async function Hero() {
     <>
       {/* HERO */}
       <section className="relative flex min-h-[calc(100vh-80px)] justify-center bg-main">
-        <div key={90} className="mx-20 my-4 max-w-full">
+        <div className="mx-20 my-4 max-w-full">
           {heroes?.map((hero, index) => (
             <>
               <div key={index} className="flex max-xl:flex-col max-xl:gap-7">
