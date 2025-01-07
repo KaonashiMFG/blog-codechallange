@@ -15,45 +15,54 @@ interface Post {
 
 export default function Post() {
   const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // FOR POST TO APPEAR
+  // Fetch all posts
   useEffect(() => {
     async function fetchPosts() {
       const allPosts = (await getAllBlog()) as unknown as Post[];
-
       if (allPosts) {
         setPosts(allPosts);
+        setFilteredPosts(allPosts); // Show all posts by default
       }
     }
-
     fetchPosts();
   }, []);
 
-  // FOR CATEGORIES TO APPEAR
+  // Fetch all categories
   useEffect(() => {
     async function getCategories() {
       const categories = await getAllCategories();
-
       if (categories) {
         const categoryNames = categories.map(
-          (category) => category.title,
+          (category) => category.title
         ) as string[];
         setCategories(categoryNames);
       }
     }
-
     getCategories();
   }, []);
 
-  // FILTERING
+  // Update filtered posts when selected categories change
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredPosts(posts); // Show all posts if no categories are selected
+    } else {
+      const filtered = posts.filter((post) =>
+        post.categories.some((category) => selectedCategories.includes(category))
+      );
+      setFilteredPosts(filtered);
+    }
+  }, [selectedCategories, posts]);
+
+  // Handle category selection
   function toggleCategory(category: string) {
     if (selectedCategories.includes(category)) {
       const filteredCategories = selectedCategories.filter(
-        (item) => item !== category,
+        (item) => item !== category
       );
       setSelectedCategories(filteredCategories);
     } else {
@@ -128,37 +137,43 @@ export default function Post() {
             Posts
           </h1>
           <div className="flex flex-col gap-5 py-5">
-            {posts?.map((item, index) => (
-              <div key={index} className="flex flex-col gap-5">
-                <article className="flex flex-col gap-5 max-xl:justify-start max-xl:text-start md:flex-row">
-                  {/* Image Section */}
-                  <div className="relative h-32 w-full md:w-1/2">
-                    <Image
-                      src={item.featuredImage}
-                      alt={String(item.title)}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  {/* Text Section */}
-                  <div className="ml-4 flex flex-col justify-center md:w-1/2">
-                    <h2 className="text-base font-semibold md:text-lg">
-                      {item.title}
-                    </h2>
-                    <p className="text-sm text-gray-600 md:text-base">
-                      {item.author}
-                    </p>
-
-                    <Link href={`/post/${item.slug}`}>
-                      <p className="mt-3 text-sm text-secondary md:mt-5">
-                        Further Reading {">"}
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((item, index) => (
+                <div key={index} className="flex flex-col gap-5">
+                  <article className="flex flex-col gap-5 max-xl:justify-start max-xl:text-start md:flex-row">
+                    {/* Image Section */}
+                    <div className="relative h-32 w-full md:w-1/2">
+                      <Image
+                        src={item.featuredImage}
+                        alt={String(item.title)}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    {/* Text Section */}
+                    <div className="ml-4 flex flex-col justify-center md:w-1/2">
+                      <h2 className="text-base font-semibold md:text-lg">
+                        {item.title}
+                      </h2>
+                      <p className="text-sm text-gray-600 md:text-base">
+                        {item.author}
                       </p>
-                    </Link>
-                  </div>
-                </article>
-                <div className="h-1 w-full bg-secondary"></div>
-              </div>
-            ))}
+
+                      <Link href={`/post/${item.slug}`}>
+                        <p className="mt-3 text-sm text-secondary md:mt-5">
+                          Further Reading {">"}
+                        </p>
+                      </Link>
+                    </div>
+                  </article>
+                  <div className="h-1 w-full bg-secondary"></div>
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-sm text-gray-500">
+                No posts match the selected categories.
+              </p>
+            )}
           </div>
         </div>
       </section>

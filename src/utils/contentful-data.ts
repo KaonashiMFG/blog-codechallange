@@ -1,4 +1,5 @@
 import * as contentful from "contentful";
+// import { HeroAndCategoriesImage } from "@/types/interface";
 
 const client = contentful.createClient({
   space: "8am65wx5arte",
@@ -34,7 +35,41 @@ export async function getEntries({
 
 export async function getAllBlog() {
   try {
-    const data = await client.getEntries({ content_type: "blog" });
+    const data = await client.getEntries({ 
+      content_type: "blog" 
+    }) as unknown as {
+      items: {
+        fields: {
+          featuredImage: {
+            fields:{
+              file:{
+                url: string
+              }
+            }
+          }
+          title: string
+          slug: string
+          author: string
+          content: {
+            content: [
+              {
+                content: [
+                  { value: "Example text" },
+                ],
+              },
+            ],
+          },
+          category: [
+            item: {
+              fields:{
+                title:string
+              }
+            }
+          ]
+        }
+      }[]
+
+    }
 
     return data.items.map((post) => {
       const thumbnailUrl = post?.fields?.featuredImage?.fields.file.url;
@@ -45,7 +80,7 @@ export async function getAllBlog() {
         author: post.fields.author,
         content: post.fields.content?.content[0].content[0].value,
         featuredImage: `http:${thumbnailUrl}`,
-        categories: post.fields.category.map((item) => item.fields.title),
+        categories: post.fields.category?.map((item) => item.fields.title),
       };
     });
   } catch (error) {
@@ -56,10 +91,24 @@ export async function getAllBlog() {
 
 export async function getLatestPosts() {
   try {
-    const res = await client.getEntries({
+    const res = (await client.getEntries({
       content_type: "blog",
       limit: 1,
-    });
+    })) as unknown as {
+      items: {
+        fields: {
+          featuredImage: { fields: { file: { url: string } } };
+          title: string;
+          slug: string;
+          author: string;
+          content: {
+            content: [{ content: [{ value: string }] }];
+          };
+          categories: string
+          preview: string
+        };
+      }[];
+    }; // [{}. {}, {}]
 
     return res.items.map((post) => {
       const thumbnailUrl = post?.fields?.featuredImage?.fields.file.url;
@@ -82,7 +131,23 @@ export async function getLatestPosts() {
 
 export async function getAllHero() {
   try {
-    const data = await client.getEntries({ content_type: "hero" });
+    const data = await client.getEntries({ 
+      content_type: "hero" 
+    }) as unknown as {
+      items: {
+        fields: {
+          image: {
+            fields: {
+              file: {
+                url: string
+              }
+            }
+          }
+          title: string
+          description: string
+        }
+      }[]
+    }
 
     return data.items.map((post) => {
       const heroUrl = post?.fields?.image?.fields?.file?.url;
@@ -101,7 +166,23 @@ export async function getAllHero() {
 
 export async function getAllCategories() {
   try {
-    const data = await client.getEntries({ content_type: "categories" });
+    const data = await client.getEntries({ 
+      content_type: "categories" 
+    }) as unknown as {
+      items: {
+        fields: {
+          title: string;
+          slug: string;
+          image: {
+            fields: {
+              file: {
+                url: string;
+              };
+            };
+          };
+        };
+      }[];
+    }
 
     return data.items.map((post) => {
       const thumbnailUrl = post?.fields?.image?.fields?.file?.url;

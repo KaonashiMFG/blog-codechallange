@@ -48,3 +48,13 @@
    - ini harus make featured categories di home page
    - buat side bar category di blog
    - search bar
+
+##  7/1/2025
+
+1. kode ini gw gk tau buat kapan, tapi yang ini gw buat untuk nge map rich text contentful
+
+   `const postContent = post![0]?.fields.content?.content[0].content;`
+   
+   `const contentVal = postContent.map((val: any) => {
+    return val.value;
+    });`

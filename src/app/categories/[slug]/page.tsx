@@ -2,18 +2,36 @@ import { getEntries } from "@/utils/contentful-data";
 import Image from "next/image";
 import Link from "next/link";
 
+interface ContetfulPost {
+  fields: {
+    title: string;
+    preview: string;
+    slug: string;
+    featuredImage: {
+      fields: {
+        file: { url: string };
+      };
+    };
+    category: { fields: { slug: string } }[];
+  };
+}
+
 export default async function SlugCategory({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = params;
+  const slug = (await params).slug;
   const posts =
-    (await getEntries({
-      content_type: "blog", fields_popular: true
-    })) || [];
+    ((await getEntries({
+      content_type: "blog",
+    })) as unknown as ContetfulPost[]) || [];
 
-console.log(posts);
+  const filteredPosts = posts?.filter((post) =>
+    post.fields.category.some((item) => item.fields.slug === slug),
+  )
+
+  console.log(filteredPosts);
 
   return (
     <section className="bg-main p-20">
@@ -35,8 +53,8 @@ console.log(posts);
       </div>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-        {posts?.length > 0 ? (
-          posts?.map((post, index: number) => (
+        {filteredPosts?.length > 0 ? (
+          filteredPosts?.map((post, index: number) => (
             <div key={index} className="rounded-md border bg-secondary p-5">
               <div className="relative h-40 w-full overflow-hidden">
                 <Image
@@ -47,14 +65,14 @@ console.log(posts);
                 />
               </div>
               <div className="flex flex-col gap-3">
-                <h2 className="mt-3 rounded-lg bg-main p-1 px-3 text-lg font-bold font-raleway">
-                  {typeof post.fields.title === 'string' ? post.fields.title : ''}
+                <h2 className="mt-3 rounded-lg bg-main p-1 px-3 font-raleway text-lg font-bold">
+                  {post.fields.title}
                 </h2>
-                <p className="text-sm text-main h-[80px]">{typeof post.fields.preview === 'string' ? post.fields.preview : ''}</p>
+                <p className="h-[80px] text-sm text-main">
+                  {post.fields.preview}
+                </p>
                 <Link href={`/post/${post.fields.slug}`}>
-                  <button className=" text-blue-300 underline">
-                    Read More
-                  </button>
+                  <button className="text-blue-300 underline">Read More</button>
                 </Link>
               </div>
             </div>
