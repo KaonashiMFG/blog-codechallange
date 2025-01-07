@@ -31,8 +31,6 @@ export default async function SlugCategory({
     post.fields.category.some((item) => item.fields.slug === slug),
   )
 
-  console.log(filteredPosts);
-
   return (
     <section className="bg-main p-20">
       <div className="flex gap-20">

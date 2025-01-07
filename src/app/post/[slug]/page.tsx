@@ -31,8 +31,6 @@ export default async function SlugPost({
     fields_slug: slug,
   })) as unknown as Post[];
 
-  console.log(post);
-
   // const postContent = post![0]?.fields.content?.content[0].content;
   // const contentVal = postContent.map((val: any) => {
   //   return val.value;

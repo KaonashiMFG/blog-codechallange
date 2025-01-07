@@ -13,8 +13,18 @@ interface Post {
   author: string;
 }
 
+function useDebounce(value: string, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
 export default function Navbar() {
-  // Add mounting state to prevent hydration mismatch
   const [isMounted, setIsMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -22,9 +32,9 @@ export default function Navbar() {
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const searchRef = useRef(null);
+  const searchRef = useRef<HTMLDivElement | null>(null);
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
-  // Handle mounting state
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -33,10 +43,10 @@ export default function Navbar() {
     async function fetchPosts() {
       try {
         const allPosts = await getAllBlog();
-        setPosts(allPosts || []); // Ensure posts is always an array
+        setPosts(allPosts || []);
       } catch (error) {
         console.error("Error fetching posts:", error);
-        setPosts([]); // Set empty array on error
+        setPosts([]);
       }
     }
 
@@ -46,16 +56,16 @@ export default function Navbar() {
   }, [isMounted]);
 
   useEffect(() => {
-    if (searchQuery && isMounted) {
+    if (debouncedSearchQuery && isMounted) {
       setFilteredPosts(
         posts.filter((post) =>
-          post.title.toLowerCase().includes(searchQuery.toLowerCase()),
-        ),
+          post.title.toLowerCase().includes(debouncedSearchQuery.toLowerCase())
+        )
       );
     } else {
       setFilteredPosts([]);
     }
-  }, [searchQuery, posts, isMounted]);
+  }, [debouncedSearchQuery, posts, isMounted]);
 
   useEffect(() => {
     if (!isMounted) return;
@@ -73,31 +83,13 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMounted]);
 
-  // Prevent rendering until client-side hydration is complete
   if (!isMounted) {
-    return (
-      <nav className="fixed left-0 right-0 top-0 z-40 flex h-20 items-center justify-between bg-main p-4 md:p-7">
-        <Link href="/" className="flex items-center">
-          <div className="h-10 w-10 md:h-14 md:w-14">
-            <Image
-              src="/nav/mountain.svg"
-              width={100}
-              height={100}
-              alt="logo"
-            />
-          </div>
-          <span className="-ml-2 -mt-2 font-raleway text-sm text-secondary md:text-base">
-            Me:JP
-          </span>
-        </Link>
-      </nav>
-    );
+    return null;
   }
 
   return (
     <>
-      {/* Rest of your existing JSX code stays the same */}
-      <nav className="fixed left-0 right-0 top-0 z-40 flex h-20 items-center justify-between bg-main p-4 md:p-7">
+      <nav className=" left-0 right-0 top-0 z-40 flex h-20 items-center justify-between bg-main p-4 md:p-7">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <div className="h-10 w-10 md:h-14 md:w-14">
@@ -113,29 +105,69 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden items-center gap-3 md:flex">
-          {navItems.map((item, index) => (
-            <div
-              key={index}
-              className="group mx-5 flex cursor-pointer flex-col items-center"
-            >
-              <div className="h-7 w-7">
-                <Link href={item.herf}>
-                  <Image
-                    src={item.logo}
-                    alt={item.label}
-                    width={100}
-                    height={100}
-                    className="h-12 w-12 transition-transform duration-300 group-hover:-translate-y-2"
-                  />
-                </Link>
+        {/* Desktop Navigation with Search Bar */}
+        <div className="hidden items-center gap-6 md:flex">
+          <div className="flex items-center gap-3">
+            {navItems.map((item, index) => (
+              <div
+                key={index}
+                className="group mx-5 flex cursor-pointer flex-col items-center"
+              >
+                <div className="h-7 w-7">
+                  <Link href={item.herf}>
+                    <Image
+                      src={item.logo}
+                      alt={item.label}
+                      width={100}
+                      height={100}
+                      className="h-12 w-12 transition-transform duration-300 group-hover:-translate-y-2"
+                    />
+                  </Link>
+                </div>
+                <span className="mt-2 translate-y-2 text-sm text-secondary opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  {item.label}
+                </span>
               </div>
-              <span className="mt-2 translate-y-2 text-sm text-secondary opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                {item.label}
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Search Bar */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search posts..."
+              className="w-64 rounded-md border border-gray-300 px-4 py-2 text-sm focus:outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {debouncedSearchQuery && filteredPosts.length > 0 && (
+              <div className="absolute z-50 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
+                {filteredPosts.map((post) => (
+                  <Link key={post.slug} href={`/post/${post.slug}`}>
+                    <div className="flex items-center px-4 py-2 hover:bg-gray-100">
+                      {post.thumbnail && (
+                        <div className="mr-4">
+                          <Image
+                            src={post.thumbnail}
+                            alt={post.title}
+                            width={40}
+                            height={40}
+                            className="rounded-md"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium">{post.title}</div>
+                        <div className="text-sm text-gray-500">
+                          by: {post.author}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Hamburger */}
@@ -163,20 +195,18 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Only render these components after mounting */}
+      {/* Sidebar */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
-
       <div
         className={`fixed right-0 top-0 z-50 h-full w-64 transform bg-[#F6F1E9] transition-transform duration-300 ease-in-out md:hidden ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Sidebar content remains the same */}
         <div className="p-5">
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -197,6 +227,33 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            {isSearchActive && filteredPosts.length > 0 && (
+              <div className="absolute top-full mt-2 w-full rounded-md border border-gray-300 bg-white shadow-lg z-40">
+                {filteredPosts.map((post) => (
+                  <Link key={post.slug} href={`/post/${post.slug}`}>
+                    <div className="flex items-center px-4 py-2 hover:bg-gray-100">
+                      {post.thumbnail && (
+                        <div className="mr-4">
+                          <Image
+                            src={post.thumbnail}
+                            alt={post.title}
+                            width={40}
+                            height={40}
+                            className="rounded-md"
+                          />
+                        </div>
+                      )}
+                      <div>
+                        <div className="font-medium">{post.title}</div>
+                        <div className="text-sm text-gray-500">
+                          by: {post.author}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mt-8 flex flex-col space-y-6">
@@ -211,8 +268,9 @@ export default function Navbar() {
                   <Image
                     src={item.logo}
                     alt={item.label}
-                    width={24}
-                    height={24}
+                    width={40}
+                    height={40}
+                    className="h-6 w-6"
                   />
                 </div>
                 <span>{item.label}</span>
@@ -221,34 +279,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {isSearchActive && filteredPosts.length > 0 && (
-        <div className="absolute right-0 z-50 mt-2 w-64 rounded-md border border-gray-300 bg-white shadow-lg">
-          {filteredPosts.map((post) => (
-            <Link key={post.slug} href={`/post/${post.slug}`}>
-              <div className="flex items-center px-4 py-2 hover:bg-gray-100">
-                {post.thumbnail && (
-                  <div className="mr-4">
-                    <Image
-                      src={post.thumbnail}
-                      alt={post.title}
-                      width={40}
-                      height={40}
-                      className="rounded-md"
-                    />
-                  </div>
-                )}
-                <div>
-                  <div className="font-medium">{post.title}</div>
-                  <div className="text-sm text-gray-500">by: {post.author}</div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-
-      <div className="h-20"></div>
     </>
   );
 }
